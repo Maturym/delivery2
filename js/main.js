@@ -1,4 +1,6 @@
 'use strict';
+import Swiper from 'https://unpkg.com/swiper/swiper-bundle.esm.browser.min.js'
+
 
 
 const cartButton = document.querySelector("#cart-button");
@@ -21,6 +23,11 @@ const cardsMenu = document.querySelector('.cards-menu');
 
 let login = localStorage.getItem('pizza');
 
+const validName = (str) => {
+  const regName = /^[a-zA-Z0-9-_\.]{1,20}$/;
+  return regName.test(str);
+};
+
 
 function toggleModal() {
   modal.classList.toggle("is-open");
@@ -36,7 +43,6 @@ const toggleModalAuth = () => {
 };
 
 const authorized = () => {
-  console.log('авторизован');
   userName.textContent = login;
 
   const logOut = () => {
@@ -58,13 +64,11 @@ const authorized = () => {
 
 
 const notAuthorized = () => {
-  console.log('не авторизован');
-
   const logIn = (e) => {
     e.preventDefault();
     login = loginInput.value;
 
-    if (!login.trim()) {
+    if (!validName(login)) {
       loginInput.style.border = '1px solid red';
     } else {
       localStorage.setItem('pizza', login);
@@ -167,7 +171,6 @@ const openGoods = (e) => {
 };
 
 
-//cardsRestaurants.addEventListener('click', openGoods);
 cardsRestaurants.addEventListener('click', () => {
   if (!login) {
     toggleModalAuth();
@@ -189,6 +192,37 @@ close.addEventListener("click", toggleModal);
 checkAuth();
 
 createCardRestaurant();
+
+
+//slider
+
+new Swiper('.swiper-container', {
+  sliderPerView: 1,
+  effect: 'fade',
+  loop: true,
+  mousewheel: false,
+  autoplay: {
+    delay: 4500,
+    disableOnInteraction: false,
+  },
+  keyboard: {
+    enabled: true,
+  },
+
+  // If we need pagination
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+
+  // Navigation arrows
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+})
+
+
 
 
 
