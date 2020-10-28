@@ -19,6 +19,7 @@ const restaurants = document.querySelector('.restaurants');
 const menu = document.querySelector('.menu');
 const logo = document.querySelector('.logo');
 const cardsMenu = document.querySelector('.cards-menu');
+const swiperContainer = document.querySelector('.swiper-container');
 
 
 let login = localStorage.getItem('pizza');
@@ -160,6 +161,7 @@ const openGoods = (e) => {
 
   if (target) {
     containerPromo.classList.add('hide');
+    swiperContainer.classList.add('hide');
     restaurants.classList.add('hide');
     menu.classList.remove('hide');
 
@@ -183,6 +185,7 @@ logo.addEventListener('click', () => {
   containerPromo.classList.remove('hide');
   restaurants.classList.remove('hide');
   menu.classList.add('hide');
+  swiperContainer.classList.remove('hide');
 });
 
 cartButton.addEventListener("click", toggleModal);
