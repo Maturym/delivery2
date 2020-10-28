@@ -167,7 +167,14 @@ const openGoods = (e) => {
 };
 
 
-cardsRestaurants.addEventListener('click', openGoods);
+//cardsRestaurants.addEventListener('click', openGoods);
+cardsRestaurants.addEventListener('click', () => {
+  if (!login) {
+    toggleModalAuth();
+  } else {
+    openGoods(event);
+  }
+});
 
 logo.addEventListener('click', () => {
   containerPromo.classList.remove('hide');
