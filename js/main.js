@@ -24,8 +24,13 @@ let login = localStorage.getItem('pizza');
 
 const toggleModalAuth = () => {
   modalAuth.classList.toggle('is-open');
-  loginInput.style.border = '';
+  if (modalAuth.classList.contains('is-open')) {
+    disablescroll();
+  } else {
+    enablesroll();
+  }
 };
+
 
 
 const authorized = () => {
@@ -67,14 +72,18 @@ const notAuthorized = () => {
       logInForm.removeEventListener('submit', logIn);
       buttonAuth.removeEventListener('click', toggleModalAuth);  
       closeAuth.removeEventListener('click', toggleModalAuth);
-      logInForm.reset();
       checkAuth();
     }
   };
 
   logInForm.addEventListener('submit', logIn);
-  buttonAuth.addEventListener('click', toggleModalAuth);  
+  buttonAuth.addEventListener('click', toggleModalAuth); 
   closeAuth.addEventListener('click', toggleModalAuth);
+  modalAuth.addEventListener('click', (e) => {
+    if (e.target.classList.contains('is-open')){
+      toggleModalAuth();
+    }
+  });
 };
 
 const checkAuth = () => {
