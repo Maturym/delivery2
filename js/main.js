@@ -36,7 +36,7 @@ let login = returnObj? returnObj.login: '';
 
 let password = returnObj? returnObj.password: '';
 
-const cart = JSON.parse(localStorage.getItem("cart"));
+let cart = JSON.parse(localStorage.getItem("cart"));
 
 const validName = (str) => {
   const regName = /^[a-zA-Z0-9-_\.]{1,20}$/;
@@ -79,6 +79,7 @@ const authorized = () => {
 
   const logOut = () => {
     login = null;
+    cart = [];
     localStorage.removeItem('cart');
     localStorage.removeItem('myKey');
     buttonAuth.style.display = '';
