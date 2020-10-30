@@ -36,8 +36,12 @@ let login = returnObj? returnObj.login: '';
 
 let password = returnObj? returnObj.password: '';
 
-// let cart = JSON.parse(localStorage.getItem("cart"));
-const cart = [];
+let cart = JSON.parse(localStorage.getItem('cartInfo')) || [];
+
+function saveCart() {
+  localStorage.setItem('cartInfo' , JSON.stringify(cart))
+};
+
 
 const validName = (str) => {
   const regName = /^[a-zA-Z0-9-_\.]{1,20}$/;
@@ -117,7 +121,7 @@ const notAuthorized = () => {
 
       localStorage.setItem("myKey", userData);
 
-      // localStorage.setItem("cart", []);
+      //localStorage.setItem("cart", []);
       // localStorage.setItem('pizza', login);
       // localStorage.setItem('pizza', password);
 
@@ -256,7 +260,6 @@ const addToCart = (e) => {
     };
 
   };
-
   // const cartData = JSON.stringify(cart);
   // localStorage.setItem("cart", cartData);
 
@@ -287,8 +290,11 @@ const renderCart = () => {
 
   modalPrice.textContent = totalPrice + " ₽";
 
-  const cartData = JSON.stringify(cart);
-  localStorage.setItem("cart", cartData);
+  console.log(cart);
+  saveCart();
+
+  // const cartData = JSON.stringify(cart);
+  // localStorage.setItem("cart", cartData);
 };
 
 const changeCount = (e) => {
