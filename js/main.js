@@ -26,13 +26,17 @@ const restaurantRating = document.querySelector('.rating');
 const restaurantPrice = document.querySelector('.price');
 const restaurantCategory = document.querySelector('.category');
 const inputSearch = document.querySelector('.input-search');
-
+const modalBody = document.querySelector('.modal-body');
+const modalPrice = document.querySelector('.modal-pricetag');
+const buttonClearCart = document.querySelector('.clear-cart');
 
 let returnObj = JSON.parse(localStorage.getItem("myKey"));
 
 let login = returnObj? returnObj.login: '';
 
 let password = returnObj? returnObj.password: '';
+
+const cart = [];
 
 const validName = (str) => {
   const regName = /^[a-zA-Z0-9-_\.]{1,20}$/;
@@ -79,13 +83,15 @@ const authorized = () => {
     buttonAuth.style.display = '';
     buttonOut.style.display = '';
     userName.style.display = '';
+    cartButton.style.display = 'flex';
     buttonOut.removeEventListener('click', logOut);
     checkAuth();
   }
 
   buttonAuth.style.display = 'none';
-  buttonOut.style.display = 'block';
+  buttonOut.style.display = 'flex';
   userName.style.display = 'inline';
+  cartButton.style.display = 'flex';
 
   buttonOut.addEventListener('click', logOut);
 };
@@ -174,6 +180,7 @@ const createCardRestaurant = ({ name, time_of_delivery, stars,
 const createCardGood = ({ description, id, image, name, price }) => {
   const card = document.createElement('div');
   card.className = 'card';
+  card.id = id;
 
   card.insertAdjacentHTML('beforeend', `
       <img src=${image} alt="image" class="card-image"/>
@@ -190,7 +197,7 @@ const createCardGood = ({ description, id, image, name, price }) => {
             <span class="button-card-text">В корзину</span>
             <span class="button-cart-svg"></span>
           </button>
-          <strong class="card-price-bold">${price} ₽</strong>
+          <strong class="card-price card-price-bold">${price} ₽</strong>
         </div>
       </div>
   `);
@@ -223,10 +230,90 @@ const openGoods = (e) => {
   }
 };
 
+const addToCart = (e) => {
+
+  const target = e.target.closest('button');
+  
+
+  if (target) {
+    const card = e.target.closest('.card');
+    const title = card.querySelector('.card-title').textContent;
+    const cost = card.querySelector('.card-price').textContent;
+    const id = card.id;
+
+    const food = cart.find((item) => {
+      return item.id === id;
+    });
+
+    if (food) {
+      food.count += 1;
+    } else {
+      cart.push({ id, cost, title, count: 1 });
+    };
+
+  };
+
+};
+
+const renderCart = () => {
+  modalBody.textContent = '';
+
+  cart.forEach((item) => {
+    const itemCart = `
+      <div class="food-row">
+      <span class="food-name">${item.title}</span>
+        <strong class="food-price">${item.cost}</strong>
+        <div class="food-counter">
+          <button class="counter-button counter-minus" data-id=${item.id}>-</button>
+          <span class="counter">${item.count}</span>
+          <button class="counter-button counter-plus" data-id=${item.id}>+</button>
+        </div>
+      </div>
+    `;
+
+    modalBody.insertAdjacentHTML('afterbegin', itemCart);
+  });
+
+  const totalPrice = cart.reduce((result, item) => {
+    return result + parseFloat(item.cost)*item.count;
+  }, 0); 
+
+  modalPrice.textContent = totalPrice + " ₽";
+
+};
+
+const changeCount = (e) => {
+  const target = e.target;
+
+  if (target.classList.contains('counter-button')) {
+    const food = cart.find((item) => {
+    return item.id === target.dataset.id;
+    });
+
+    if (target.classList.contains('counter-minus')) {
+      food.count--;
+      if (food.count === 0) {
+        cart.splice(cart.indexOf(food), 1)
+      }
+    };
+
+    if (target.classList.contains('counter-plus')) food.count++;
+
+    renderCart();  
+  }
+};
+
 function init() {
   getData('./db/partners.json').then(data => {
     data.forEach(createCardRestaurant)
   });
+
+  buttonClearCart.addEventListener('click', () => {
+    cart.length = 0;
+    renderCart();
+  });
+
+  cardsMenu.addEventListener('click', addToCart);
   
   cardsRestaurants.addEventListener('click', () => {
     if (!login) {
@@ -243,11 +330,16 @@ function init() {
     swiperContainer.classList.remove('hide');
   });
   
-  cartButton.addEventListener("click", toggleModal);
+  cartButton.addEventListener("click", () => {
+    renderCart();
+    toggleModal();
+  });
   
   close.addEventListener("click", toggleModal);
   
   checkAuth();
+
+  modalBody.addEventListener('click', changeCount);
 
   inputSearch.addEventListener('keypress', (e) => {
 
@@ -327,7 +419,9 @@ function init() {
       prevEl: '.swiper-button-prev',
     },
   });
-}
+};
+
+
 
 init();
 
