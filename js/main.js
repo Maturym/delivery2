@@ -36,7 +36,8 @@ let login = returnObj? returnObj.login: '';
 
 let password = returnObj? returnObj.password: '';
 
-let cart = JSON.parse(localStorage.getItem("cart"));
+// let cart = JSON.parse(localStorage.getItem("cart"));
+const cart = [];
 
 const validName = (str) => {
   const regName = /^[a-zA-Z0-9-_\.]{1,20}$/;
@@ -113,9 +114,10 @@ const notAuthorized = () => {
       passwordInput.style.border = '1px solid red';
     } else {
       const userData = JSON.stringify(obj);
-      cart = [];
 
       localStorage.setItem("myKey", userData);
+
+      // localStorage.setItem("cart", []);
       // localStorage.setItem('pizza', login);
       // localStorage.setItem('pizza', password);
 
@@ -255,7 +257,7 @@ const addToCart = (e) => {
 
   };
 
-  const cartData = JSON.stringify(cart)
+  const cartData = JSON.stringify(cart);
   localStorage.setItem("cart", cartData);
 
 };
