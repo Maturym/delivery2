@@ -36,7 +36,7 @@ let login = returnObj? returnObj.login: '';
 
 let password = returnObj? returnObj.password: '';
 
-const cart = [];
+const cart = JSON.parse(localStorage.getItem("cart"));
 
 const validName = (str) => {
   const regName = /^[a-zA-Z0-9-_\.]{1,20}$/;
@@ -79,6 +79,7 @@ const authorized = () => {
 
   const logOut = () => {
     login = null;
+    localStorage.removeItem('cart');
     localStorage.removeItem('myKey');
     buttonAuth.style.display = '';
     buttonOut.style.display = '';
@@ -253,6 +254,9 @@ const addToCart = (e) => {
 
   };
 
+  const cartData = JSON.stringify(cart)
+  localStorage.setItem("cart", cartData);
+
 };
 
 const renderCart = () => {
@@ -279,7 +283,6 @@ const renderCart = () => {
   }, 0); 
 
   modalPrice.textContent = totalPrice + " ₽";
-
 };
 
 const changeCount = (e) => {
@@ -310,6 +313,7 @@ function init() {
 
   buttonClearCart.addEventListener('click', () => {
     cart.length = 0;
+    localStorage.removeItem('cart');
     renderCart();
   });
 
