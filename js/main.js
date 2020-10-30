@@ -257,8 +257,8 @@ const addToCart = (e) => {
 
   };
 
-  const cartData = JSON.stringify(cart);
-  localStorage.setItem("cart", cartData);
+  // const cartData = JSON.stringify(cart);
+  // localStorage.setItem("cart", cartData);
 
 };
 
@@ -286,6 +286,9 @@ const renderCart = () => {
   }, 0); 
 
   modalPrice.textContent = totalPrice + " ₽";
+
+  const cartData = JSON.stringify(cart);
+  localStorage.setItem("cart", cartData);
 };
 
 const changeCount = (e) => {
