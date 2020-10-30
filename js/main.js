@@ -79,7 +79,6 @@ const authorized = () => {
 
   const logOut = () => {
     login = null;
-    cart = [];
     localStorage.removeItem('cart');
     localStorage.removeItem('myKey');
     buttonAuth.style.display = '';
@@ -114,6 +113,7 @@ const notAuthorized = () => {
       passwordInput.style.border = '1px solid red';
     } else {
       const userData = JSON.stringify(obj);
+      cart = [];
 
       localStorage.setItem("myKey", userData);
       // localStorage.setItem('pizza', login);
