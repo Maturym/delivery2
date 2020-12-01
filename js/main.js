@@ -290,7 +290,6 @@ const renderCart = () => {
 
   modalPrice.textContent = totalPrice + " ₽";
 
-  console.log(cart);
   saveCart();
 
   // const cartData = JSON.stringify(cart);
